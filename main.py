@@ -14,7 +14,6 @@ application = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
 
 
 def add_link(link):
-    print(f"Adding link {link}")
     gc = gspread.service_account_from_dict(SPREAD_CREDENTIALS)
     sh = gc.open_by_key(SPREADSHEET_ID)
     counter = sh.get_worksheet(0)
@@ -28,12 +27,15 @@ def add_link(link):
 
 
 async def unknown(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.message.text == "ping":
+    if update.message.text.lower() == "ping":
         await context.bot.send_message(chat_id=update.effective_chat.id, text="pong")
     else:
         await context.bot.send_message(chat_id=update.effective_chat.id, text="Storing...")
-        r = add_link(update.message.text)
-        await context.bot.send_message(chat_id=update.effective_chat.id, text=r)
+        try:
+            r = add_link(update.message.text)
+            await context.bot.send_message(chat_id=update.effective_chat.id, text=r)
+        except Exception as e:
+            await context.bot.send_message(chat_id=update.effective_chat.id, text=f"Error: {e}")
 
 handler = MessageHandler(filters.TEXT, unknown)
 application.add_handler(handler)
