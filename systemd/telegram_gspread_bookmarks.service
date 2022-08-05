@@ -1,0 +1,10 @@
+[Unit]
+After=docker.service
+Requires=docker.service
+
+[Service]
+Restart=always
+RestartSec=3
+ExecStart=docker run --rm --env-file /etc/telegram_gspread_bookmarks.env --name telegram_gspread_bookmarks telegram_gspread_bookmarks
+
+[Install]
