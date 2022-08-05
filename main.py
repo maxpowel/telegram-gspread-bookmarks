@@ -25,9 +25,12 @@ def add_link(link):
     return f"Old size was {current_value}, new size is {new_value}"
 
 async def unknown(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await context.bot.send_message(chat_id=update.effective_chat.id, text="Storing...")
-    r = add_link(update.message.text)
-    await context.bot.send_message(chat_id=update.effective_chat.id, text=r)
+    if update.message.text == "ping":
+        await context.bot.send_message(chat_id=update.effective_chat.id, text="pong")
+    else:
+        await context.bot.send_message(chat_id=update.effective_chat.id, text="Storing...")
+        r = add_link(update.message.text)
+        await context.bot.send_message(chat_id=update.effective_chat.id, text=r)
 
 handler = MessageHandler(filters.TEXT, unknown)
 application.add_handler(handler)
