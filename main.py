@@ -3,6 +3,7 @@ from telegram.ext import filters, ApplicationBuilder, ContextTypes, MessageHandl
 import gspread
 import os
 import json
+
 #CONFIG
 TELEGRAM_TOKEN = os.environ["TELEGRAM_TOKEN"]
 SPREAD_CREDENTIALS = json.loads(os.environ["SPREAD_CREDENTIALS"])
@@ -10,6 +11,7 @@ SPREADSHEET_ID = os.environ["SPREADSHEET_ID"]
 ###
 
 application = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
+
 
 def add_link(link):
     print(f"Adding link {link}")
@@ -24,6 +26,7 @@ def add_link(link):
     gc.session.close()
     return f"Old size was {current_value}, new size is {new_value}"
 
+
 async def unknown(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.message.text == "ping":
         await context.bot.send_message(chat_id=update.effective_chat.id, text="pong")
@@ -34,5 +37,4 @@ async def unknown(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 handler = MessageHandler(filters.TEXT, unknown)
 application.add_handler(handler)
-print("Ready")
 application.run_polling()
